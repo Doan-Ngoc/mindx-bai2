@@ -1,15 +1,47 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Welcome to My App</title>
-  <link rel="stylesheet" type="text/css" href="../styles.css">
+    <title>Welcome to My App</title>
+    <link rel="stylesheet" type="text/css" href="../styles.css">
 </head>
+
 <body>
-  <div class="container">
-    <h2 class="title">Welcome to My Shop!</h2>
-    <button  onclick="location.href='/login'">Log In</button>
-    <button onclick="location.href='/api/inventories'">Inventory</button>
-    <button onclick="location.href='/api/orders'">Orders</button>
-  </div>
+    <div class="container">
+        <h2 class="title">Welcome to My Shop!</h2>
+        <button id="loginBtn" onclick="handleLoginButtonClick()"></button>
+        <button onclick="location.href='/api/inventories'">Inventory</button>
+        <button onclick="location.href='/api/orders'">Orders</button>
+    </div>
+
+
+    <script>
+        const loginBtn = document.getElementById("loginBtn");
+        function updateLoginButtonText() {
+            const token = localStorage.getItem("token");
+            if (token) {
+                loginBtn.textContent = "Log Out";
+
+            } else {
+                loginBtn.textContent = "Log In";
+            }
+        }
+
+        function handleLoginButtonClick() {
+            if (loginBtn.textContent === "Log In") {
+                location.href = "/login";
+            } else {
+                localStorage.removeItem("token");
+                updateLoginButtonText();
+                location.href = "/logout";
+            }
+        }
+
+        updateLoginButtonText();
+    </script>
+
+
+
 </body>
+
 </html>

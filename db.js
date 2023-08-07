@@ -13,7 +13,7 @@ async function connectToDb() {
     inventoryCollection = db.collection("inventory");
     userCollection = db.collection("users");
     allUsers = await userCollection.find({}).toArray();
-    
+
   } catch (err) {
     console.error('Error connecting to MongoDB:', err);
   }
@@ -62,12 +62,12 @@ async function orderWithProductDescriptions() {
         },
       },
     ]).toArray();
-    console.log("Orders with descriptions:", ordersWithDescriptions);
     return ordersWithDescriptions;
   } catch (err) {
     console.error("Error fetching orders with product descriptions:", err);
     throw err;
-  }}
+  }
+}
 
 
 module.exports = {

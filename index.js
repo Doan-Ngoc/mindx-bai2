@@ -1,11 +1,12 @@
 const express = require("express");
-const { connectToDb, getInventories, orderWithProductDescriptions} = require("./db");
+const { connectToDb, getInventories, orderWithProductDescriptions } = require("./db");
 const path = require("path");
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt");
-const {login} = require("./middleware/Login")
-const {verifyUser} = require("./middleware/VerifyUser")
+const { login } = require("./middleware/Login")
+const { verifyUser } = require("./middleware/VerifyUser")
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 const app = express();
 connectToDb();
@@ -13,6 +14,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "pages"), { 'content-type': 'application/javascript' }));
 app.use(express.static(path.join(__dirname)));
 app.use(cookieParser());
+app.use(session({
+  secret: "my-secret-key",
+  resave: false,
+  saveUninitialized: true
+}));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "pages", "home.html"));
@@ -51,6 +57,10 @@ app.get("/api/orders", verifyUser, async (req, res) => {
   }
 });
 
+app.get("/logout", (req, res) => {
+  req.session.token = null;
+  res.status(200).send("<h1>Đăng xuất thành công</h1>");
+});
 
 app.listen(3000, () => {
   console.log("App is running at 3000");
