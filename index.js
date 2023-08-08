@@ -28,7 +28,11 @@ app.get("/api/inventories", verifyUser, async (req, res) => {
   const { lowQuantity } = req.query;
   try {
     const inventories = await getInventories(lowQuantity);
-    res.json(inventories);
+    //res.json(inventories);
+    res.send(`
+      <h5>${JSON.stringify(inventories)}</h5>
+      <button id="lowQuantityBtn" onclick="location.href='/api/inventories?lowQuantity=true'">Show Low Quantity Items</button>
+    `);
   } catch (err) {
     console.error("Error fetching inventories:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -50,6 +54,7 @@ app.post("/login", login, (req, res) => {
 app.get("/api/orders", verifyUser, async (req, res) => {
   try {
     const ordersWithDescriptions = await orderWithProductDescriptions();
+    
     res.json(ordersWithDescriptions);
   } catch (err) {
     console.error("Error fetching order information:", err);
